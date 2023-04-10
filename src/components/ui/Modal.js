@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function Modal({
-    title, closeModal, handleChange, tipoEquipo, loadingSave, saveTipoEquipo
-}) {
+export default function Modal(props) {
+    const { title, closeModal, handleChange, data, loadingSave, saveData } = props;
+
     return (
         <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
@@ -14,27 +14,22 @@ export default function Modal({
                     <div className="modal-body">
                         <form>
                             <div className="mb-3">
-                                <label htmlFor="recipient-name" className="col-form-label">Nombre:</label>
-                                <input type="text" className="form-control" id="recipient-name" name="nombre" onChange={handleChange} value={tipoEquipo.nombre} />
+                                <label htmlFor="recipient-name" className="col-form-label">Nombre</label>
+                                <input type="text" className="form-control" id="recipient-name" name="nombre" onChange={handleChange} value={data && data.nombre} />
                             </div>
                         </form>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeModal}>
-                            Cerrar
-                        </button>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeModal}>Cerrar</button>
 
                         {loadingSave ? (
                             <button className="btn btn-primary" type="button" disabled>
                                 <span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                 Guardando...
                             </button>
-                        ) :
-                            (
-                                <button type="button" className="btn btn-primary" onClick={saveTipoEquipo} disabled={tipoEquipo.nombre.length == 0}>
-                                    Enviar
-                                </button>
-                            )}
+                        ) : (
+                            <button type="button" className="btn btn-primary" onClick={saveData} disabled={!data || data.nombre.length === 0}>Enviar</button>
+                        )}
                     </div>
                 </div>
             </div>
