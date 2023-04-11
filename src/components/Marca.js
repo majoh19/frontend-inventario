@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { createMarca, getMarca } from '../services/MarcaService'
+import { createMarca, editarMarca, getMarca } from '../services/MarcaService'
 import Modal from './ui/Modal'
+import ModalEdit from './ui/ModalEdit'
 
 export default function Marca() {
 
@@ -12,6 +13,7 @@ export default function Marca() {
   const [error, setError] = useState(false)
   const [marca, setMarca] = useState({ nombre: '' })
   const [loadingSave, setLoadingSave] = useState(false)
+  const [id, setId] = useState('')
 
   const listMarcaEquipo = async () => {
     try {
@@ -52,8 +54,32 @@ export default function Marca() {
 
   const closeModal = () => { setMarca({ nombre: '' }) }
 
+  const selectMarcaEquipo = (evt) => {
+    evt.preventDefault()
+    setId(evt.target.id)
+    const brand = marcaEquipo.filter(marca => marca._id === evt.target.id)
+    setMarca({ ...brand[0] })
+  }
+
+  const editMarcaEquipo = async () => {
+    try {
+      setError(false)
+      setLoadingSave(true)
+      const response = await editarMarca(id, marca)
+      console.log(response)
+      setMarca({ nombre: '' })
+      listMarcaEquipo()
+      setTimeout(() => { setLoadingSave(false) }, 500)
+    } catch (e) {
+      console.log(e)
+      setError(true)
+      setLoadingSave(false)
+    }
+  }
+
   return (
     <>
+      <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} marca={marca} loadingSave={loadingSave} editMarcaEquipo={editMarcaEquipo} />
       <Modal title={title} closeModal={closeModal} handleChange={handleChange} marcaEquipo={marcaEquipo} loadingSave={loadingSave} saveMarcaEquipo={saveMarcaEquipo} />
       <div className='form-check form-switch'>
         <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
@@ -94,8 +120,7 @@ export default function Marca() {
                           <td>{dayjs(marcaE.fechaCreacion).format('DD/MM/YYYY')}</td>
                           <td>{dayjs(marcaE.fechaActualizacion).format('DD/MM/YYYY')}</td>
                           <td>
-                            <button type="button" className="btn btn-outline-primary btn-sm">Editar</button>
-                            <button type="button" className="btn btn-outline-danger btn-sm">Eliminar</button>
+                          <button onClick={selectMarcaEquipo} type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" id={marcaEquipo._id}>Editar</button>
                           </td>
                         </tr>
                       );

@@ -6,10 +6,22 @@ const getTipoEquipo = (estado) => {
     })
 }
 
-const createTipoEquipo = () => {
-
-
+const createTipoEquipo = (data = {}) => {
+    return axiosConfig.post('tiposequipos', data, {
+        headers: { 'Content-Type': 'application/json' }
+    })
 }
 
+const editarTipoEquipo = (tipoId, data) => {
+    return axiosConfig.put(`tiposequipos/${tipoId}`, data, {
+        headers: { 'Content-Type': 'application/json' }
+    })
+}
 
-export { getTipoEquipo, createTipoEquipo }
+const deleteTipoEquipo = (tipoId) => {
+    return axiosConfig.delete(`tiposequipos/${tipoId}`, {}, {
+        headers: { 'Content-Type': 'application/json' }
+    })
+}
+
+export { getTipoEquipo, createTipoEquipo, editarTipoEquipo, deleteTipoEquipo }

@@ -8,10 +8,22 @@ const getMarca = (estado) => {
     })
 }
 
-const createMarca = () => {
-
+const createMarca = (data = {}) => {
+    return axiosConfig.post('marcas', data, {
+        headers: { 'Content-Type': 'application/json' }
+    })
 }
 
-export {
-    getMarca, createMarca
+const editarMarca = (marcaId, data) => {
+    return axiosConfig.put(`marcas/${marcaId}`, data, {
+        headers: { 'Content-Type': 'application/json' }
+    })
 }
+
+const deleteMarca = (marcaId) => {
+    return axiosConfig.delete(`marcas/${marcaId}`, {}, {
+        headers: { 'Content-Type': 'application/json' }
+    })
+}
+
+export { getMarca, createMarca, editarMarca, deleteMarca}

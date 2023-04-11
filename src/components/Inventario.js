@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { createInventario, getInventario } from '../services/InventarioService'
+import { createInventario, editarInvetario, getInventario } from '../services/InventarioService'
 import Modal from './ui/Modal'
+import ModalEdit from './ui/ModalEdit'
 
 export default function Inventario() {
 
@@ -12,6 +13,7 @@ export default function Inventario() {
   const [error, setError] = useState(false)
   const [inventario, setInventario] = useState({ nombre: '' })
   const [loadingSave, setLoadingSave] = useState(false)
+  const [id, setId] = useState('')
 
   const listInventarios = async () => {
     try {
@@ -52,8 +54,32 @@ export default function Inventario() {
 
   const closeModal = () => { setInventario({ nombre: '' }) }
 
+  const selectInventario = (evt) => {
+    evt.preventDefault()
+    setId(evt.target.id)
+    const invent = inventarios.filter(inventario => inventario._id === evt.target.id)
+    setInventario({ ...invent[0] })
+  }
+
+  const editInventario = async () => {
+    try {
+      setError(false)
+      setLoadingSave(true)
+      const response = await editarInvetario(id, inventario)
+      console.log(response)
+      setInventario({ nombre: '' })
+      listInventarios()
+      setTimeout(() => { setLoadingSave(false) }, 500)
+    } catch (e) {
+      console.log(e)
+      setError(true)
+      setLoadingSave(false)
+    }
+  }
+
   return (
     <>
+      <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} inventario={inventario} loadingSave={loadingSave} editInventario={editInventario} />
       <Modal title={title} closeModal={closeModal} handleChange={handleChange} nombre={inventario.nombre} loadingSave={loadingSave} saveInventario={saveInventario} />
       <div className='form-check form-switch'>
         <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
@@ -97,7 +123,7 @@ export default function Inventario() {
                       <td>{inventario.serial}</td>
                       <td>{inventario.modelo}</td>
                       <td>{inventario.descripcion}</td>
-                      <td>{inventario.foto}</td>
+                      <td><img src={inventario.foto} alt="Foto" width="50" height="50" /></td>
                       <td>{inventario.color}</td>
                       <td>{dayjs(inventario.fechaCompra).format('DD/MM/YYYY')}</td>
                       <td>{inventario.precio}</td>
@@ -106,8 +132,7 @@ export default function Inventario() {
                       <td>{inventario.estadoEquipo.nombre}</td>
                       <td>{inventario.tipoEquipo.nombre}</td>
                       <td>
-                        <button type="button" className="btn btn-outline-primary btn-sm">Editar</button>
-                        <button type="button" className="btn btn-outline-danger btn-sm">Eliminar</button>
+                        <button onClick={selectInventario} type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" id={inventarios._id}>Editar</button>
                       </td>
                     </tr>
                   )

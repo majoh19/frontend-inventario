@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { createUsuario, getUsuario } from '../services/UsuarioService'
+import { createUsuario, getUsuario, editarUsuario } from '../services/UsuarioService'
 import Modal from './ui/Modal'
+import ModalEdit from './ui/ModalEdit'
 
 export default function Usuario() {
 
@@ -12,6 +13,7 @@ export default function Usuario() {
   const [error, setError] = useState(false)
   const [usuario, setUsuario] = useState({ nombre: '' })
   const [loadingSave, setLoadingSave] = useState(false)
+  const [id, setId] = useState('')
 
   const listUsuarios = async () => {
     try {
@@ -52,10 +54,34 @@ export default function Usuario() {
 
   const closeModal = () => { setUsuario({ nombre: '' }) }
 
+  const selectUsuario = (evt) => {
+    evt.preventDefault()
+    setId(evt.target.id)
+    const user = usuarios.filter(usuario => usuario._id === evt.target.id)
+    setUsuario({ ...user[0] })
+  }
+
+  const editUsuario = async () => {
+    try {
+      setError(false)
+      setLoadingSave(true)
+      const response = await editarUsuario(id, usuario)
+      console.log(response)
+      setUsuario({ nombre: '' })
+      listUsuarios()
+      setTimeout(() => { setLoadingSave(false) }, 500)
+    } catch (e) {
+      console.log(e)
+      setError(true)
+      setLoadingSave(false)
+    }
+  }
+
   return (
     <>
-    <Modal title={title} closeModal={closeModal} handleChange={handleChange} usuario={usuario} loadingSave={loadingSave} saveUsuario={saveUsuario} />
-    <div className='form-check form-switch'>
+      <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} usuario={usuario} loadingSave={loadingSave} editUsuario={editUsuario} />
+      <Modal title={title} closeModal={closeModal} handleChange={handleChange} usuario={usuario} loadingSave={loadingSave} saveUsuario={saveUsuario} />
+      <div className='form-check form-switch'>
         <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
         <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>Activos</label>
       </div>
@@ -96,8 +122,7 @@ export default function Usuario() {
                           <td>{dayjs(usuario.fechaCreacion).format('DD/MM/YYYY')}</td>
                           <td>{dayjs(usuario.fechaActualizacion).format('DD/MM/YYYY')}</td>
                           <td>
-                            <button type="button" className="btn btn-outline-primary btn-sm">Editar</button>
-                            <button type="button" className="btn btn-outline-danger btn-sm">Eliminar</button>
+                            <button onClick={selectUsuario} type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" id={usuarios._id}>Editar</button>
                           </td>
                         </tr>
                       );
