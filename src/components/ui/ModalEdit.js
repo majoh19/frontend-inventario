@@ -34,7 +34,7 @@ export default function ModalEdit(props) {
                                 Guardando...
                             </button>
                         ) : (
-                            <button type="button" className="btn btn-primary" onClick={saveData} disabled={!data || data.nombre.length === 0}>Enviar</button>
+                            <button type="button" className="btn btn-primary" onClick={saveData} disabled={data && data.nombre.length == 0}>Enviar</button>
                         )}
                     </div>
                 </div>
