@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { createInventario, editarInvetario, getInventario } from '../services/InventarioService'
-import Modal from './ui/Modal'
-import ModalEdit from './ui/ModalEdit'
+import ModalInventario from './ui/ModalInventario'
 
 export default function Inventario() {
 
@@ -11,7 +10,7 @@ export default function Inventario() {
   const [query, setQuery] = useState(true)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [inventario, setInventario] = useState({ nombre: '' })
+  const [inventario, setInventario] = useState({ serial: '' })
   const [loadingSave, setLoadingSave] = useState(false)
   const [id, setId] = useState('')
 
@@ -42,7 +41,7 @@ export default function Inventario() {
       setLoadingSave(true)
       const response = await createInventario(inventario)
       console.log(response)
-      setInventario({ nombre: '' })
+      setInventario({ serial: '' })
       listInventarios()
       setTimeout(() => { setLoadingSave(false) }, 500)
     } catch (e) {
@@ -52,7 +51,7 @@ export default function Inventario() {
     }
   }
 
-  const closeModal = () => { setInventario({ nombre: '' }) }
+  const closeModal = () => { setInventario({ serial: '' }) }
 
   const selectInventario = (evt) => {
     evt.preventDefault()
@@ -67,7 +66,7 @@ export default function Inventario() {
       setLoadingSave(true)
       const response = await editarInvetario(id, inventario)
       console.log(response)
-      setInventario({ nombre: '' })
+      setInventario({ serial: '' })
       listInventarios()
       setTimeout(() => { setLoadingSave(false) }, 500)
     } catch (e) {
@@ -79,8 +78,7 @@ export default function Inventario() {
 
   return (
     <>
-      <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} inventario={inventario} loadingSave={loadingSave} editInventario={editInventario} />
-      <Modal title={title} closeModal={closeModal} handleChange={handleChange} nombre={inventario.nombre} loadingSave={loadingSave} saveInventario={saveInventario} />
+      <ModalInventario title={title} closeModal={closeModal} handleChange={handleChange} serial={inventario.serial} loadingSave={loadingSave} saveInventario={saveInventario} />
       <div className='form-check form-switch'>
         <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
         <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>Activos</label>
@@ -132,7 +130,7 @@ export default function Inventario() {
                       <td>{inventario.estadoEquipo.nombre}</td>
                       <td>{inventario.tipoEquipo.nombre}</td>
                       <td>
-                        <button onClick={selectInventario} type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" id={inventarios._id}>Editar</button>
+                        <button onClick={selectInventario} type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" id={inventario._id}>Editar</button>
                       </td>
                     </tr>
                   )

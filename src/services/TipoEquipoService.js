@@ -1,6 +1,6 @@
 import { axiosConfig } from "../configuration/axiosConfig"
 
-const getTipoEquipo = (estado) => {
+const getTipoEquipos = (estado) => {
     return axiosConfig.get('tiposequipos?estado=' + estado, {
         headers: { 'Content-Type': 'application/json' }
     })
@@ -24,4 +24,4 @@ const deleteTipoEquipo = (tipoId) => {
     })
 }
 
-export { getTipoEquipo, createTipoEquipo, editarTipoEquipo, deleteTipoEquipo }
+export { getTipoEquipos, createTipoEquipo, editarTipoEquipo, deleteTipoEquipo }

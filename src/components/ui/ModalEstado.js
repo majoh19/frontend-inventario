@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function ModalEstado({
-    title, closeModal, handleChange, tipoEquipo, loadingSave, saveTipoEquipo
+    title, closeModal, handleChange, estado, loadingSave, saveEstado
 }) {
     return (
         <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -14,8 +14,8 @@ export default function ModalEstado({
                     <div className="modal-body">
                         <form>
                             <div className="mb-3">
-                                <label htmlFor="recipient-name" className="col-form-label">Nombre</label>
-                                <input type="text" className="form-control" id="recipient-name" name="nombre" onChange={handleChange} value={tipoEquipo?.nombre || ''} />
+                                <label htmlFor="recipient-name" className="col-form-label"> Nombre </label>
+                                <input type="text" className="form-control" id="recipient-name" name="nombre" onChange={handleChange} value={estado?.nombre} />
                             </div>
                         </form>
                     </div>
@@ -27,7 +27,7 @@ export default function ModalEstado({
                                 Guardando...
                             </button>
                         ) : (
-                            <button type="button" className="btn btn-primary" onClick={saveTipoEquipo} disabled={tipoEquipo?.nombre?.length === 0}>Enviar</button>
+                            <button type="button" className="btn btn-primary" onClick={saveEstado} disabled={estado?.nombre?.length === 0}>Enviar</button>
                         )
                         }
                     </div>

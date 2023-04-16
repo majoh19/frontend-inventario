@@ -1,27 +1,27 @@
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
-import { createTipoEquipo, getTipoEquipo, editarTipoEquipo } from '../services/TipoEquipoService'
+import { createTipoEquipo, getTipoEquipos, editarTipoEquipo } from '../services/TipoEquipoService'
 import Modal from './ui/Modal'
 import ModalEdit from './ui/ModalEdit'
 
 export default function TipoEquipo() {
 
     const title = 'Tipo de Equipo'
-    const [tipoEquipo, setTipoEquipo] = useState([])
+    const [tipoEquipos, setTipoEquipos] = useState([])
     const [query, setQuery] = useState(true)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    const [tipo, setTipo] = useState({ nombre: '' })
+    const [tipoEquipo, setTipoEquipo] = useState({ nombre: '' })
     const [loadingSave, setLoadingSave] = useState(false)
     const [id, setId] = useState('')
 
-    const listTipoEquipo = async () => {
+    const listTipoEquipos = async () => {
         try {
             setLoading(true)
             setError(false)
-            const { data } = await getTipoEquipo(query)
+            const { data } = await getTipoEquipos(query)
             console.log(data)
-            setTipoEquipo(data)
+            setTipoEquipos(data)
             setTimeout(() => {
                 setLoading(false)
             }, 500)
@@ -32,20 +32,22 @@ export default function TipoEquipo() {
         }
     }
 
-    useEffect(() => { listTipoEquipo() }, [query])
+    useEffect(() => {
+        listTipoEquipos()
+      }, [query])
 
     const changeSwitch = () => { setQuery(!query) }
 
-    const handleChange = (e) => { setTipo({ ...tipo, [e.target.name]: e.target.value }) }
+    const handleChange = (e) => { setTipoEquipo({ ...tipoEquipo, [e.target.name]: e.target.value }) }
 
     const saveTipoEquipo = async () => {
         try {
             setError(false)
             setLoadingSave(true)
-            const response = await createTipoEquipo(tipo)
+            const response = await createTipoEquipo(tipoEquipo)
             console.log(response)
-            setTipo({ nombre: '' })
-            listTipoEquipo()
+            setTipoEquipo({ nombre: '' })
+            listTipoEquipos()
             setTimeout(() => {
                 setLoadingSave(false)
             }, 500)
@@ -56,24 +58,26 @@ export default function TipoEquipo() {
         }
     }
 
-    const closeModal = () => { setTipo({ nombre: '' }) 
+    const closeModal = () => {
+        setTipoEquipo({ nombre: '' })
+        if (id) setId('')
     }
 
     const selectTipoEquipo = (evt) => {
         evt.preventDefault()
         setId(evt.target.id)
-        const tEq = tipoEquipo.filter(tipo => tipo._id === evt.target.id)
-        setTipo({ ...tEq[0] })
+        const tEq = tipoEquipos.filter(tipoEquipo => tipoEquipo._id === evt.target.id)
+        setTipoEquipo({ ...tEq[0] })
     }
 
     const editTipoEquipo = async () => {
         try {
             setError(false)
             setLoadingSave(true)
-            const response = await editarTipoEquipo(id, tipo)
+            const response = await editarTipoEquipo(id, tipoEquipo)
             console.log(response)
-            setTipo({ nombre: '' })
-            listTipoEquipo()
+            setTipoEquipo({ nombre: '' })
+            listTipoEquipos()
             setTimeout(() => { setLoadingSave(false) }, 500)
         } catch (e) {
             console.log(e)
@@ -84,8 +88,8 @@ export default function TipoEquipo() {
 
     return (
         <>
-            <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} tipo={tipo} loadingSave={loadingSave} editTipoEquipo={editTipoEquipo} />
-            <Modal title={title} closeModal={closeModal} handleChange={handleChange} tipo={tipo} loadingSave={loadingSave} saveTipoEquipo={saveTipoEquipo} />
+            <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} tipoEquipo={tipoEquipo} loadingSave={loadingSave} editTipoEquipo={editTipoEquipo} />
+            <Modal title={title} closeModal={closeModal} handleChange={handleChange} tipoEquipo={tipoEquipo} loadingSave={loadingSave} saveTipoEquipo={saveTipoEquipo} />
             <div className='form-check form-switch'>
                 <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
                 <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>Activos</label>
@@ -116,7 +120,7 @@ export default function TipoEquipo() {
                                 </thead>
                                 <tbody>
                                     {
-                                        tipoEquipo.map((tipoE, index) => {
+                                        tipoEquipos.map((tipoE, index) => {
                                             return (
                                                 <tr>
                                                     <th scope="row">{index + 1}</th>

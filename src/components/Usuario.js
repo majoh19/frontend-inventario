@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { createUsuario, getUsuario, editarUsuario } from '../services/UsuarioService'
-import Modal from './ui/Modal'
-import ModalEdit from './ui/ModalEdit'
+import ModalUsuario from './ui/ModalUsuario'
 
 export default function Usuario() {
 
@@ -79,8 +78,7 @@ export default function Usuario() {
 
   return (
     <>
-      <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} usuario={usuario} loadingSave={loadingSave} editUsuario={editUsuario} />
-      <Modal title={title} closeModal={closeModal} handleChange={handleChange} usuario={usuario} loadingSave={loadingSave} saveUsuario={saveUsuario} />
+      <ModalUsuario title={title} closeModal={closeModal} handleChange={handleChange} usuario={usuario} loadingSave={loadingSave} saveUsuario={saveUsuario} />
       <div className='form-check form-switch'>
         <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
         <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>Activos</label>

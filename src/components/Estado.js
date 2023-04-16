@@ -1,8 +1,7 @@
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { createEstado, getEstado, editarEstado } from '../services/EstadoService'
-import Modal from './ui/Modal'
-import ModalEdit from './ui/ModalEdit'
+import ModalEstado from './ui/ModalEstado'
 
 export default function Estado() {
 
@@ -56,7 +55,10 @@ export default function Estado() {
     }
   }
 
-  const closeModal = () => { setEstado({ nombre: '' }) }
+  const closeModal = () => {
+    setEstado({ nombre: '' })
+    if (id) setId('')
+  }
 
   const selectEstadoEquipo = (evt) => {
     evt.preventDefault()
@@ -83,8 +85,7 @@ export default function Estado() {
 
   return (
     <>
-      <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} estado={estado} loadingSave={loadingSave} editEstadoEquipo={editEstadoEquipo} />
-      <Modal title={title} closeModal={closeModal} handleChange={handleChange} estado={estado} loadingSave={loadingSave} saveEstado={saveEstado} />
+      <ModalEstado title={title} closeModal={closeModal} handleChange={handleChange} estado={estado} loadingSave={loadingSave} saveEstado={saveEstado} />
       <div className='form-check form-switch'>
         <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
         <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>Activos</label>

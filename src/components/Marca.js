@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { createMarca, editarMarca, getMarca } from '../services/MarcaService'
-import Modal from './ui/Modal'
-import ModalEdit from './ui/ModalEdit'
+import ModalMarca from './ui/ModalMarca'
 
 export default function Marca() {
 
   const title = 'Marca'
-  const [marcaEquipo, setMarcaEquipo] = useState([])
+  const [marcas, setMarcas] = useState([])
   const [query, setQuery] = useState(true)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -15,13 +14,13 @@ export default function Marca() {
   const [loadingSave, setLoadingSave] = useState(false)
   const [id, setId] = useState('')
 
-  const listMarcaEquipo = async () => {
+  const listMarcas = async () => {
     try {
       setLoading(true)
       setError(false)
       const { data } = await getMarca(query)
       console.log(data)
-      setMarcaEquipo(data)
+      setMarcas(data)
       setTimeout(() => { setLoading(false) }, 500)
     } catch (e) {
       console.log(e)
@@ -30,20 +29,20 @@ export default function Marca() {
     }
   }
 
-  useEffect(() => { listMarcaEquipo() }, [query])
+  useEffect(() => { listMarcas() }, [query])
 
   const changeSwitch = () => { setQuery(!query) }
 
   const handleChange = (e) => { setMarca({ ...marca, [e.target.name]: e.target.value }) }
 
-  const saveMarcaEquipo = async () => {
+  const saveMarca = async () => {
     try {
       setError(false)
       setLoadingSave(true)
       const response = await createMarca(marca)
       console.log(response)
       setMarca({ nombre: '' })
-      listMarcaEquipo()
+      listMarcas()
       setTimeout(() => { setLoadingSave(false) }, 500)
     } catch (e) {
       console.log(e)
@@ -57,7 +56,7 @@ export default function Marca() {
   const selectMarcaEquipo = (evt) => {
     evt.preventDefault()
     setId(evt.target.id)
-    const brand = marcaEquipo.filter(marca => marca._id === evt.target.id)
+    const brand = marcas.filter(marca => marca._id === evt.target.id)
     setMarca({ ...brand[0] })
   }
 
@@ -68,7 +67,7 @@ export default function Marca() {
       const response = await editarMarca(id, marca)
       console.log(response)
       setMarca({ nombre: '' })
-      listMarcaEquipo()
+      listMarcas()
       setTimeout(() => { setLoadingSave(false) }, 500)
     } catch (e) {
       console.log(e)
@@ -79,8 +78,7 @@ export default function Marca() {
 
   return (
     <>
-      <ModalEdit title={title} closeModal={closeModal} handleChange={handleChange} marca={marca} loadingSave={loadingSave} editMarcaEquipo={editMarcaEquipo} />
-      <Modal title={title} closeModal={closeModal} handleChange={handleChange} marcaEquipo={marcaEquipo} loadingSave={loadingSave} saveMarcaEquipo={saveMarcaEquipo} />
+      <ModalMarca title={title} closeModal={closeModal} handleChange={handleChange} marca={marca} loadingSave={loadingSave} saveMarca={saveMarca} />
       <div className='form-check form-switch'>
         <input className='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckChecked' checked={query} onChange={changeSwitch} />
         <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>Activos</label>
@@ -111,7 +109,7 @@ export default function Marca() {
                 </thead>
                 <tbody>
                   {
-                    marcaEquipo.map((marcaE, index) => {
+                    marcas.map((marcaE, index) => {
                       return (
                         <tr>
                           <th scope="row">{index + 1}</th>
@@ -120,10 +118,10 @@ export default function Marca() {
                           <td>{dayjs(marcaE.fechaCreacion).format('DD/MM/YYYY')}</td>
                           <td>{dayjs(marcaE.fechaActualizacion).format('DD/MM/YYYY')}</td>
                           <td>
-                          <button onClick={selectMarcaEquipo} type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" id={marcaEquipo._id}>Editar</button>
+                          <button onClick={selectMarcaEquipo} type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalEdit" id={marcas._id}>Editar</button>
                           </td>
                         </tr>
-                      );
+                      )
                     })
                   }
                 </tbody>

@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function ModalEdit(props) {
-    const { title, closeModal, handleChange, data, loadingSave, saveData } = props
-
+export default function ModalEdit({
+    title, closeModal, handleChange, tipoEquipo, loadingSave, editTipoEquipo
+}) {
     return (
         <div className="modal fade" id="exampleModalEdit" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
@@ -15,11 +15,11 @@ export default function ModalEdit(props) {
                         <form>
                             <div className="mb-3">
                                 <label htmlFor="recipient-name" className="col-form-label">Nombre</label>
-                                <input type="text" className="form-control" id="recipient-name" name="nombre" onChange={handleChange} value={data && data.nombre} />
+                                <input type="text" className="form-control" id="recipient-name" name="nombre" onChange={handleChange} value={tipoEquipo?.nombre || ''} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="status" className="col-form-label">Estado</label>
-                                <select className="form-control" id="status" name="estado" onChange={handleChange} value={data && data.estado}>
+                                <select className="form-control" id="status" name="estado" onChange={handleChange} value={tipoEquipo?.estado}>
                                     <option value={false}>Inactivo</option>
                                     <option value={true}>Activo</option>
                                 </select>
@@ -34,7 +34,7 @@ export default function ModalEdit(props) {
                                 Guardando...
                             </button>
                         ) : (
-                            <button type="button" className="btn btn-primary" onClick={saveData} disabled={data && data.nombre.length == 0}>Enviar</button>
+                            <button type="button" className="btn btn-primary" onClick={editTipoEquipo} disabled={tipoEquipo?.nombre?.length === 0}>Enviar</button>
                         )}
                     </div>
                 </div>
