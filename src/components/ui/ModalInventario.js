@@ -15,7 +15,7 @@ export default function ModalInventario({
                         <form>
                             <div className="mb-3">
                                 <label htmlFor="recipient-name" className="col-form-label"> Serial </label>
-                                <input type="text" className="form-control" id="recipient-name" name="nombre" onChange={handleChange} value={inventario?.serial} />
+                                <input type="text" className="form-control" id="recipient-name" name="serial" onChange={handleChange} value={inventario?.serial} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="recipient-name" className="col-form-label"> Modelo </label>
@@ -43,19 +43,19 @@ export default function ModalInventario({
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="recipient-name" className="col-form-label"> Usuario </label>
-                                <input type="text" className="form-control" id="recipient-name" name="usuario" onChange={handleChange} value={inventario?.usuario} />
+                                <input type="text" className="form-control" id="recipient-name" name="usuario" onChange={handleChange} value={inventario?.usuario?.nombre} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="recipient-name" className="col-form-label"> Marca </label>
-                                <input type="text" className="form-control" id="recipient-name" name="marca" onChange={handleChange} value={inventario?.marca} />
+                                <input type="text" className="form-control" id="recipient-name" name="marca" onChange={handleChange} value={inventario?.marca?.nombre} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="recipient-name" className="col-form-label"> Estado </label>
-                                <input type="text" className="form-control" id="recipient-name" name="estado" onChange={handleChange} value={inventario?.estadoEquipo} />
+                                <input type="text" className="form-control" id="recipient-name" name="estado" onChange={handleChange} value={inventario?.estadoEquipo?.nombre} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="recipient-name" className="col-form-label"> Tipo </label>
-                                <input type="text" className="form-control" id="recipient-name" name="tipo" onChange={handleChange} value={inventario?.tipoEquipo} />
+                                <input type="text" className="form-control" id="recipient-name" name="tipo" onChange={handleChange} value={inventario?.tipoEquipo?.nombre} />
                             </div>
                         </form>
                     </div>

@@ -10,7 +10,7 @@ export default function Inventario() {
   const [query, setQuery] = useState(true)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [inventario, setInventario] = useState({ serial: '' })
+  const [inventario, setInventario] = useState({ _id:'', serial: '' })
   const [loadingSave, setLoadingSave] = useState(false)
   const [id, setId] = useState('')
 
@@ -41,7 +41,7 @@ export default function Inventario() {
       setLoadingSave(true)
       const response = await createInventario(inventario)
       console.log(response)
-      setInventario({ serial: '' })
+      setInventario({ _id:'', serial: '' })
       listInventarios()
       setTimeout(() => { setLoadingSave(false) }, 500)
     } catch (e) {
@@ -51,13 +51,13 @@ export default function Inventario() {
     }
   }
 
-  const closeModal = () => { setInventario({ serial: '' }) }
+  const closeModal = () => { setInventario({ _id:'', serial: '' }) }
 
   const selectInventario = (evt) => {
     evt.preventDefault()
     setId(evt.target.id)
     const invent = inventarios.filter(inventario => inventario._id === evt.target.id)
-    setInventario({ ...invent[0] })
+    setInventario({ ...inventario, ...invent[0] })
   }
 
   const editInventario = async () => {
@@ -66,7 +66,7 @@ export default function Inventario() {
       setLoadingSave(true)
       const response = await editarInvetario(id, inventario)
       console.log(response)
-      setInventario({ serial: '' })
+      setInventario({ _id:'', serial: '' })
       listInventarios()
       setTimeout(() => { setLoadingSave(false) }, 500)
     } catch (e) {
